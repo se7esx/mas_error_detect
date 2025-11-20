@@ -1,9 +1,12 @@
 # mas_error_detect
+
+please download Who&When first: https://huggingface.co/datasets/Kevin355/Who_and_When/
+
 run baseline:
 
-run gpt4o-mini: python llm_Detect.py
+gpt4o-mini: python llm_Detect.py
 
-run Bert: python bert_detect.py
+Bert: python bert_detect.py
 
 run masc: 
 
