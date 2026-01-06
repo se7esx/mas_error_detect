@@ -293,7 +293,7 @@ def train_epoch(model, data, optimizer, device="cuda"):
     total_loss = 0.0
     count = 0
     for seq in data:
-        if seq.size(0) < 2:   # 只有一个 step → 跳过
+        if seq.size(0) < 2:   
             continue
 
         seq = seq.to(device).unsqueeze(0)
@@ -321,14 +321,14 @@ def anomaly_score_autoregressive(model, seq, device="cuda"):
     seq = seq.to(device)                     # (L, D)
     L   = seq.size(0)
     scores = []
-    if L < 2:   # 只有一个 step，没有 anomaly score
+    if L < 2:  
         return [1.0]
 
     # history_pred: (1, 1, D)
     history_pred = seq[0:1, :].unsqueeze(0)
 
     for t in range(0, L - 1):
-        # 预测基于当前历史的“下一步”表征
+     
         pred_all = model(history_pred)       # (1, len(history), D)
         pred_next = pred_all[:, -1, :]       #
 
@@ -351,7 +351,7 @@ def anomaly_score_teacher_forcing_with_proto(model, seq, device="cuda", alpha=1.
     sigmoid_score = []
     preds = []
 
-    # 🔑 prototype 对齐到输入的 device
+
     proto = model.prototype.to(seq.device)
     proto = F.normalize(proto, dim=-1)  # (1,D)
 
@@ -525,9 +525,7 @@ def build_dataset_from_single_all_sentence_files(folder_path, file_list,test_is 
         all_sentences.append(st)
         all_labels.append(s_label)
     return all_sentences, all_labels, file_used
-# ==========================
-# 4. Demo
-# ==========================
+
 import numpy as np
 
 
@@ -551,8 +549,7 @@ if __name__ == "__main__":
     encoder = SentenceEncoder(device=device)
 
     folder_path = "who and when path"
-    # train_files = [f for f in os.listdir(folder_path)
-    #               if os.path.isfile(os.path.join(folder_path, f))]
+
     SILDE_WINDOW = False
     if SILDE_WINDOW:
         train_files = [f for f in os.listdir(folder_path)
@@ -595,8 +592,7 @@ if __name__ == "__main__":
     else:
     # 5) 
         test_seq, all_labels, file_used = build_dataset_from_single_files(folder_path, test_files,test_is=True)
-    #test_seq = ["What is 5*6?", "It is 30.", "Correct.", "The moon is made of cheese."]
-    #test_emb = encoder.encode(test_seq)      # (L, D)
+ 
     test_data = []
     for conv in test_seq:
         emb = encoder.encode(conv)  # (seq_len, emb_dim)
@@ -662,4 +658,5 @@ if __name__ == "__main__":
             f"[Test Set] Acc: {right_num / len(file_used):.8f} ")
         print(
             f"[Test Set] Acc: {right_num_1 / len(file_used):.8f} ")
+
 
