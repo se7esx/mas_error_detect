@@ -31,19 +31,19 @@ class ChunkedTextClassifier(nn.Module):
         self.stride = stride
         self.aggregation = aggregation
 
-        # 冻结的编码模型
+ 
         self.encoder = SentenceTransformer(model_name)
-        #self.encoder.eval()  # 防止训练模式
+        #self.encoder.eval()  
         for param in self.encoder.parameters():
             param.requires_grad = False
 
         embedding_dim = self.encoder.get_sentence_embedding_dimension()
 
-        # 可训练的分类头（两层 MLP）
+      
         self.classifier = nn.Sequential(
             nn.Linear(embedding_dim, hidden_dim),
             nn.ReLU(),
-            nn.Linear(hidden_dim, 2)  # 二分类
+            nn.Linear(hidden_dim, 2)  
         )
 
     def embed_batch_texts(self, texts: list[str]) -> torch.Tensor:
@@ -77,3 +77,4 @@ class ChunkedTextClassifier(nn.Module):
         emb = self.embed_long_text(text)
         emb_tensor = torch.tensor(emb, dtype=torch.float32).unsqueeze(0).to(next(self.classifier.parameters()).device)
         return self.classifier(emb_tensor)
+
