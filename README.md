@@ -1,4 +1,4 @@
-# MASC
+# MASC-model
 
 please download Who&When first: https://huggingface.co/datasets/Kevin355/Who_and_When/
 
